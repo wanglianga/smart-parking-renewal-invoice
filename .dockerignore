@@ -1,0 +1,15 @@
+node_modules
+dist
+build
+__pycache__
+*.pyc
+*.pyo
+.env
+.venv
+venv
+.git
+.gitignore
+.DS_Store
+*.log
+README.md
+.done

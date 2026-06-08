@@ -75,22 +75,27 @@ def check_arrears(owner_id: int, db: Session = Depends(get_db)):
         final_status = "no_record"
 
     summary_parts = []
-    summary_parts.append(f"车主：{db_owner.name}（车牌：{db_owner.plate_number}）")
+    summary_parts.append("车主：{}（车牌：{}）".format(db_owner.name, db_owner.plate_number))
     if latest_renewal:
-        summary_parts.append(f"最近续费：原价{latest_renewal.original_amount}元")
+        summary_parts.append("最近续费：原价{}元".format(latest_renewal.original_amount))
         if coupon_usage:
             summary_parts.append(
-                f"使用优惠券【{coupon_usage['coupon_name}】抵扣{coupon_usage['discount_amount']}元"
+                "使用优惠券[{}]抵扣{}元".format(
+                    coupon_usage["coupon_name"],
+                    coupon_usage["discount_amount"]
+                )
             )
-        summary_parts.append(f"实付{latest_renewal.final_amount}元")
-        summary_parts.append(f"续费状态：{latest_renewal.status}")
+        summary_parts.append("实付{}元".format(latest_renewal.final_amount))
+        summary_parts.append("续费状态：{}".format(latest_renewal.status))
     else:
         summary_parts.append("暂无续费记录")
     if has_arrears:
-        summary_parts.append(f"欠费拦截触发：存在{len(unpaid_arrears)}笔欠费，合计{total_arrears}元")
+        summary_parts.append(
+            "欠费拦截触发：存在{}笔欠费，合计{}元".format(len(unpaid_arrears), total_arrears)
+        )
     else:
         summary_parts.append("欠费拦截通过：无欠费记录")
-    summary_parts.append(f"最终口径：{final_status}")
+    summary_parts.append("最终口径：{}".format(final_status))
     summary = "；".join(summary_parts)
 
     for a in unpaid_arrears:
